@@ -58,14 +58,14 @@ function DataCenterPoint({
     }
   }
 
-  const handleClick = (e: React.MouseEvent) => {
+  const handleClick = (e: any) => {
     e.stopPropagation()
     if (isMobile || isTablet) {
       onMobileClick(dataCenter)
     }
   }
 
-  const handlePointerDown = (e: React.PointerEvent) => {
+  const handlePointerDown = (e: any) => {
     e.stopPropagation()
     if (isMobile || isTablet) {
       onMobileClick(dataCenter)

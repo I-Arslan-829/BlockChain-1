@@ -372,8 +372,17 @@ const DualMetricsLegend = ({ config }: { config: ModuleConfig }) => {
 
 export function MetricsModule({ type }: MetricsModuleProps) {
   const config = moduleConfigs[type]
-  
-  // Early return if config is not found
+
+  // Move hooks to the top, before any return!
+  const [currentValue, setCurrentValue] = useState(config?.fallbackValue ?? 0)
+  const [chartData, setChartData] = useState<MetricData[]>([])
+  const [selectedRange, setSelectedRange] = useState<TimeRange>("1D")
+  const [loading, setLoading] = useState(true)
+  const [chartLoading, setChartLoading] = useState(false)
+  const [yAxisTicks, setYAxisTicks] = useState<number[]>([])
+  const [initialLoad, setInitialLoad] = useState(false)
+
+  // If config is not found, show error (after hooks)
   if (!config) {
     return (
       <div className="bg-gradient-to-br from-slate-900/80 to-slate-800/80 backdrop-blur-sm border border-slate-600/50 rounded-2xl p-4 md:p-6 text-white h-full shadow-2xl">
@@ -381,14 +390,6 @@ export function MetricsModule({ type }: MetricsModuleProps) {
       </div>
     )
   }
-
-  const [currentValue, setCurrentValue] = useState(config.fallbackValue)
-  const [chartData, setChartData] = useState<MetricData[]>([])
-  const [selectedRange, setSelectedRange] = useState<TimeRange>("1D")
-  const [loading, setLoading] = useState(true)
-  const [chartLoading, setChartLoading] = useState(false)
-  const [yAxisTicks, setYAxisTicks] = useState<number[]>([])
-  const [initialLoad, setInitialLoad] = useState(false)
 
   // Function to calculate dynamic Y-axis ticks based on data
   const calculateYAxisTicks = useCallback((data: MetricData[]) => {
